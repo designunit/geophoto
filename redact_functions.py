@@ -44,11 +44,11 @@ def get_rotate(orientation):
     if orientation == 1:
         return 0
     elif orientation == 3:
-        return -180
+        return 180
     elif orientation == 6:
-        return -270
+        return 270
     elif orientation == 8:
-        return -90
+        return 90
     return 0
 
 
@@ -57,5 +57,5 @@ def rotating_the_image(image_path, required_file, saving_path):
     orientation = get_orientation(required_file)
     degrees = get_rotate(orientation)
     rotated_image = image_obj.rotate(degrees)
-    rotated_image.save(saving_path)
+    rotated_image.save(saving_path + required_file)
     return 0
