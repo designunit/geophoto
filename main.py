@@ -4,7 +4,7 @@ import os
 from PIL import Image
 
 import coordinates_convector
-import redact_functions
+import image
 
 # path = str(input())
 # source_folder = str(input())
@@ -30,12 +30,12 @@ os.chdir(source_folder)
 
 for file in glob.glob('*.JPG'):
     with Image.open(file) as original_image:
-        exif = redact_functions.get_exif(file)
-        geotags = redact_functions.get_geo_info(exif)
-        required_rotation = redact_functions.get_orientation(file)
+        exif = image.get_exif(file)
+        geotags = image.get_geo_info(exif)
+        required_rotation = image.get_orientation(file)
         if geotags:
             coordinates = coordinates_convector.get_coordinates(geotags)
-            redact_functions.writing_data(name_of_the_geojson_file, coordinates, file)
-            redact_functions.rotating_the_image(source_folder, file, destination_folder)
+            image.writing_data(name_of_the_geojson_file, coordinates, file)
+            image.rotating_the_image(source_folder, file, destination_folder)
         else:
             pass
