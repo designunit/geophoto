@@ -25,10 +25,10 @@ else:
 
 os.chdir(source_folder)
 
-
+# TODO: get the right arguments
 def get_rotation(orientation):
     if orientation == 1:
-        return -90
+        pass
     if orientation == 2:
         return -90
     if orientation == 3:
@@ -45,6 +45,7 @@ def get_rotation(orientation):
         return -90
     return 0
 
+# TODO:
 # def get_record(arg0, arg1):
 
 
@@ -58,7 +59,6 @@ for file in glob.glob('*.JPG'):
             for k, v in original_image.getexif().items()
             if k in ExifTags.TAGS
         }
-        # does_have_coordinates = original_image['GPSInfo']
         if 'GPSInfo' in metadata_of_original_image:  # CHECKED AVAILABILITY OF GPS COORDINATES; NEED TO RESIZE IT NOW
             # TODO: WRITE COORDINATES HERE IN GEOJSON FILE
             my_file = open(destination_folder + name_of_the_geojson_file, "w+")
@@ -78,18 +78,3 @@ for file in glob.glob('*.JPG'):
                 pass
         else:
             pass
-
-        # print(metadata_of_resized_image)
-        # resized_image_orientation = 'Orientation'
-        # if resized_image_orientation in metadata_of_resized_image:
-        #     if resized_image_orientation != 1:
-        #         resized_image_orientation = 1
-        #     else:
-        #         upass
-        # else:
-        #     pass
-        #     metadata_of_resized_image = {
-        #         ExifTags.TAGS[k]: v
-        #         for k, v in original_image.getexif().items()
-        #         if k in ExifTags.TAGS
-        #     }
