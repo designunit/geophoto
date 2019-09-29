@@ -74,23 +74,18 @@ def get_rotation(orientation):
     return 0
 
 
-# TODO: add exif check here
 for file in glob.glob('*.JPG'):
     with Image.open(file) as original_image:
-        # TODO: checking the desired file
         exif = get_exif(file)
         geotags = get_geo_info(exif)
 
+        # TODO: add recording to file and check rotating function
         if geotags:
             coordinates = GPSC.get_coordinates(geotags)
             print(coordinates)
 
-        metadata_of_original_image = {
-            ExifTags.TAGS[k]: v
-            # for k, v in original_image.getexif().items()  # USING GETEXIF`
-            for k, v in original_image.getexif().items()  #
-            if k in ExifTags.TAGS
-        }
+
+
         if 'GPSInfo' in metadata_of_original_image:
             # TODO: WRITE COORDINATES HERE IN GEOJSON FILE
             my_file = open(destination_folder + name_of_the_geojson_file, "w+")
