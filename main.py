@@ -13,6 +13,7 @@ source_folder = "E:/jpg/"
 filename = source_folder + 'yard.JPG'
 destination_folder = "E:/jpg1/"
 name_of_the_geojson_file = destination_folder + "coordinates_and_titles.geojson"
+url_base = 'http://google.com/'
 
 if os.path.exists(source_folder):
     pass
@@ -35,7 +36,7 @@ for file in glob.glob('*.JPG'):
         required_rotation = image.get_orientation(file)
         if geotags:
             coordinates = coordinates_convector.get_coordinates(geotags)
-            image.writing_data(name_of_the_geojson_file, coordinates, file)
+            image.writing_data(name_of_the_geojson_file, coordinates, url_base + file)
             image.rotating_the_image(source_folder, file, destination_folder)
         else:
             pass

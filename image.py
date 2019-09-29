@@ -67,7 +67,7 @@ def rotating_the_image(image_path, required_file, saving_path):
     return 0
 
 
-def writing_data(required_name_of_file, coordinates, img_name):
+def writing_data(required_name_of_file, coordinates, url):
     my_details = {
         'type': 'FeatureCollection',
         'features': [
@@ -77,7 +77,7 @@ def writing_data(required_name_of_file, coordinates, img_name):
                     'type': 'Point',
                     'coordinates': coordinates,
                     'properties': {
-                        'features': img_name
+                        'url': url
                     },
                 }
             }
