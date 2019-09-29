@@ -12,7 +12,7 @@ import redact_functions
 source_folder = "E:/jpg/"
 filename = source_folder + 'yard.JPG'
 destination_folder = "E:/jpg1/"
-name_of_the_geojson_file = "coordinates.geojson"
+name_of_the_geojson_file = destination_folder + "coordinates_and_titles.geojson"
 
 if os.path.exists(source_folder):
     pass
@@ -35,9 +35,7 @@ for file in glob.glob('*.JPG'):
         required_rotation = redact_functions.get_orientation(file)
         if geotags:
             coordinates = coordinates_convector.get_coordinates(geotags)
+            redact_functions.writing_data(name_of_the_geojson_file, coordinates, file)
             redact_functions.rotating_the_image(source_folder, file, destination_folder)
-            print(coordinates)
-            print(file)  # file is the name of the *.jpeg
-            
         else:
             pass
