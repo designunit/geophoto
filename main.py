@@ -1,13 +1,18 @@
 import glob
 import os
+import GPSC
 
 from PIL import ExifTags
 from PIL import Image
+from PIL.ExifTags import TAGS
+from PIL.ExifTags import GPSTAGS
+
 
 # path = str(input())
 # source_folder = str(input())
 # destination_folder = str(input())
 source_folder = "E:/jpg/"
+filename = source_folder + 'yard.JPG'  # insert this if you need to work with file
 destination_folder = "E:/jpg1/"
 name_of_the_geojson_file = "coordinates.geojson"
 
@@ -25,7 +30,30 @@ else:
 
 os.chdir(source_folder)
 
-# TODO: get the right arguments
+
+# TODO: make function to get files' exif info
+def get_exif(required_file):
+    image = Image.open(required_file)
+    image.verify()
+    return image.getexif()
+
+
+def get_geo_info(required_exif):
+    if not required_exif:
+        return None
+
+    geo_info = {}
+    for (idx, tag) in TAGS.items():
+        if tag == 'GPSInfo':
+            if idx not in required_exif:
+                return None
+            for (key, val) in GPSTAGS.items():
+                if key in required_exif[idx]:
+                    geo_info[val] = required_exif[idx][key]
+
+    return geo_info
+
+
 def get_rotation(orientation):
     if orientation == 1:
         pass
@@ -45,21 +73,25 @@ def get_rotation(orientation):
         return -90
     return 0
 
-# TODO:
-# def get_record(arg0, arg1):
-
-
 
 # TODO: add exif check here
 for file in glob.glob('*.JPG'):
     with Image.open(file) as original_image:
         # TODO: checking the desired file
+        exif = get_exif(file)
+        geotags = get_geo_info(exif)
+
+        if geotags:
+            coordinates = GPSC.get_coordinates(geotags)
+            print(coordinates)
+
         metadata_of_original_image = {
             ExifTags.TAGS[k]: v
-            for k, v in original_image.getexif().items()
+            # for k, v in original_image.getexif().items()  # USING GETEXIF`
+            for k, v in original_image.getexif().items()  #
             if k in ExifTags.TAGS
         }
-        if 'GPSInfo' in metadata_of_original_image:  # CHECKED AVAILABILITY OF GPS COORDINATES; NEED TO RESIZE IT NOW
+        if 'GPSInfo' in metadata_of_original_image:
             # TODO: WRITE COORDINATES HERE IN GEOJSON FILE
             my_file = open(destination_folder + name_of_the_geojson_file, "w+")
             if 'Latitude:' in metadata_of_original_image:
