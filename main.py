@@ -1,15 +1,18 @@
 import glob
 import os
 
-from PIL import ExifTags
 from PIL import Image
+
+import coordinates_convector
+import redact_functions
 
 # path = str(input())
 # source_folder = str(input())
 # destination_folder = str(input())
 source_folder = "E:/jpg/"
+filename = source_folder + 'yard.JPG'
 destination_folder = "E:/jpg1/"
-name_of_the_geojson_file = "coordinates.geojson"
+name_of_the_geojson_file = destination_folder + "coordinates_and_titles.geojson"
 
 if os.path.exists(source_folder):
     pass
@@ -25,71 +28,14 @@ else:
 
 os.chdir(source_folder)
 
-
-def get_rotation(orientation):
-    if orientation == 1:
-        return -90
-    if orientation == 2:
-        return -90
-    if orientation == 3:
-        return -90
-    if orientation == 4:
-        return -90
-    if orientation == 5:
-        return -90
-    if orientation == 6:
-        return -90
-    if orientation == 7:
-        return -90
-    if orientation == 8:
-        return -90
-    return 0
-
-# def get_record(arg0, arg1):
-
-
-
-# TODO: add exif check here
 for file in glob.glob('*.JPG'):
     with Image.open(file) as original_image:
-        # TODO: checking the desired file
-        metadata_of_original_image = {
-            ExifTags.TAGS[k]: v
-            for k, v in original_image.getexif().items()
-            if k in ExifTags.TAGS
-        }
-        # does_have_coordinates = original_image['GPSInfo']
-        if 'GPSInfo' in metadata_of_original_image:  # CHECKED AVAILABILITY OF GPS COORDINATES; NEED TO RESIZE IT NOW
-            # TODO: WRITE COORDINATES HERE IN GEOJSON FILE
-            my_file = open(destination_folder + name_of_the_geojson_file, "w+")
-            if 'Latitude:' in metadata_of_original_image:
-                my_file.write("Latitude:" + metadata_of_original_image['GPSInfo'])
-            elif 'Longitude:' in metadata_of_original_image:
-                my_file.write("Longitude:" + metadata_of_original_image['GPSInfo'])
-
-            changing_orientation_index = 'Orientation'
-            if changing_orientation_index in metadata_of_original_image:
-                orientation_index = metadata_of_original_image['Orientation']
-                rotation_angle = get_rotation(orientation_index)
-                rotated_image = original_image.rotate(rotation_angle)
-                resized_image = rotated_image.resize((200, 200))
-                resized_image.save(destination_folder + file)
-            else:
-                pass
+        exif = redact_functions.get_exif(file)
+        geotags = redact_functions.get_geo_info(exif)
+        required_rotation = redact_functions.get_orientation(file)
+        if geotags:
+            coordinates = coordinates_convector.get_coordinates(geotags)
+            redact_functions.writing_data(name_of_the_geojson_file, coordinates, file)
+            redact_functions.rotating_the_image(source_folder, file, destination_folder)
         else:
             pass
-
-        # print(metadata_of_resized_image)
-        # resized_image_orientation = 'Orientation'
-        # if resized_image_orientation in metadata_of_resized_image:
-        #     if resized_image_orientation != 1:
-        #         resized_image_orientation = 1
-        #     else:
-        #         upass
-        # else:
-        #     pass
-        #     metadata_of_resized_image = {
-        #         ExifTags.TAGS[k]: v
-        #         for k, v in original_image.getexif().items()
-        #         if k in ExifTags.TAGS
-        #     }
