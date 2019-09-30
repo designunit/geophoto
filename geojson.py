@@ -2,7 +2,7 @@ import json
 
 
 def create_geojson(images):
-    my_details = {
+    return {
         'type': 'FeatureCollection',
         'features': [
             {
@@ -18,7 +18,6 @@ def create_geojson(images):
             for img in images
         ]
     }
-    return my_details
 
 
 def save_json(required_name_of_file, my_details):

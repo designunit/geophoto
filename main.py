@@ -38,11 +38,12 @@ for file in glob.glob('*.JPG'):
         if geotags:
             coordinates = coordinates_convector.get_coordinates(geotags)
 
-            features = geojson.create_geojson([{
-                'url': url_base + file,
-                'coordinates': coordinates
-            }])
-            geojson.save_json(name_of_the_geojson_file, features)
             image.rotating_the_image(source_folder, file, destination_folder)
         else:
             pass
+
+features = geojson.create_geojson([{
+    'url': url_base + file,
+    'coordinates': coordinates
+}])
+geojson.save_json(name_of_the_geojson_file, features)
