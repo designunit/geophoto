@@ -7,6 +7,7 @@ def create_geojson(images):
         'features': [
             {
                 'type': 'Feature',
+                'id': img['id'],
                 'geometry': {
                     'type': 'Point',
                     'coordinates': img['coordinates'],

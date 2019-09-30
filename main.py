@@ -1,6 +1,6 @@
 import glob
 import os
-import sys  # for inputting the paths
+import sys
 
 from PIL import Image
 
@@ -11,7 +11,7 @@ import geojson
 # input the source folder
 # input the destination folder
 # input the size of the second-formatted picture
-#
+
 source_folder = "E:/jpg/"
 filename = source_folder + 'yard.JPG'
 destination_folder = "E:/jpg1/"
@@ -32,6 +32,9 @@ else:
 
 os.chdir(source_folder)
 
+images = []
+counter = 0
+
 for file in glob.glob('*.JPG'):
     with Image.open(file) as original_image:
         exif = image.get_exif(file)
@@ -39,13 +42,15 @@ for file in glob.glob('*.JPG'):
         required_rotation = image.get_orientation(file)
         if geotags:
             coordinates = coordinates_convector.get_coordinates(geotags)
-
             image.rotating_the_image(source_folder, file, destination_folder)
+            images.append({
+                'id': counter,
+                'url': url_base + file,
+                'coordinates': coordinates
+            })
+            counter += 1
         else:
             pass
 
-features = geojson.create_geojson([{
-    'url': url_base + file,
-    'coordinates': coordinates
-}])
+features = geojson.create_geojson(images)
 geojson.save_json(name_of_the_geojson_file, features)
