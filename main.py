@@ -44,7 +44,8 @@ for file in glob.glob('*.JPG'):
             images.append({
                 'id': counter,
                 'url': url_base + file,
-                'coordinates': coordinates
+                'coordinates': coordinates,
+                'value': 1
             })
             counter += 1
         else:

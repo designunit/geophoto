@@ -11,10 +11,11 @@ def create_geojson(images):
                 'geometry': {
                     'type': 'Point',
                     'coordinates': img['coordinates'],
-                    'properties': {
-                        'url': img['url']
-                    },
-                }
+                },
+                'properties': {
+                    'url': img['url'],
+                    'value': img['value']
+                },
             }
             for img in images
         ]
