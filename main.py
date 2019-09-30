@@ -1,5 +1,6 @@
 import glob
 import os
+import sys  # for inputting the paths
 
 from PIL import Image
 
@@ -7,9 +8,10 @@ import coordinates_convector
 import image
 import geojson
 
-# path = str(input())
-# source_folder = str(input())
-# destination_folder = str(input())
+# input the source folder
+# input the destination folder
+# input the size of the second-formatted picture
+#
 source_folder = "E:/jpg/"
 filename = source_folder + 'yard.JPG'
 destination_folder = "E:/jpg1/"
