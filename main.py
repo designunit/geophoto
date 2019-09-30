@@ -8,15 +8,13 @@ import coordinates_convector
 import image
 import geojson
 
-# input the source folder
-# input the destination folder
-# input the size of the second-formatted picture
 
-source_folder = "E:/jpg/"
+source_folder = sys.argv[1]
 filename = source_folder + 'yard.JPG'
-destination_folder = "E:/jpg1/"
+destination_folder = sys.argv[2]
 name_of_the_geojson_file = destination_folder + "coordinates_and_titles.geojson"
-url_base = 'http://google.com/'
+url_base = sys.argv[3]
+size = (int(sys.argv[4]), int(sys.argv[4]))
 
 if os.path.exists(source_folder):
     pass
@@ -42,7 +40,7 @@ for file in glob.glob('*.JPG'):
         required_rotation = image.get_orientation(file)
         if geotags:
             coordinates = coordinates_convector.get_coordinates(geotags)
-            image.rotating_the_image(source_folder, file, destination_folder)
+            image.rotating_the_image(source_folder, file, destination_folder, size)
             images.append({
                 'id': counter,
                 'url': url_base + file,

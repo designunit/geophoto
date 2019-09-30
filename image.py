@@ -55,12 +55,11 @@ def get_rotate(orientation):
     return 0
 
 
-def rotating_the_image(image_path, required_file, saving_path):
+def rotating_the_image(image_path, required_file, saving_path, img_size):
     image_obj = Image.open(image_path + required_file)
     orientation = get_orientation(required_file)
     degrees = get_rotate(orientation)
     rotated_image = image_obj.rotate(degrees)
-    img_size = (200, 200)
     resized_image = PIL.ImageOps.fit(rotated_image, img_size, centering=(0.5, 0.5))
     resized_image.save(saving_path + required_file)
     return 0
