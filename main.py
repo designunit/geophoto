@@ -5,6 +5,7 @@ from PIL import Image
 
 import coordinates_convector
 import image
+import geojson
 
 # path = str(input())
 # source_folder = str(input())
@@ -36,7 +37,12 @@ for file in glob.glob('*.JPG'):
         required_rotation = image.get_orientation(file)
         if geotags:
             coordinates = coordinates_convector.get_coordinates(geotags)
-            image.writing_data(name_of_the_geojson_file, coordinates, url_base + file)
+
+            features = geojson.create_geojson([{
+                'url': url_base + file,
+                'coordinates': coordinates
+            }])
+            geojson.save_json(name_of_the_geojson_file, features)
             image.rotating_the_image(source_folder, file, destination_folder)
         else:
             pass

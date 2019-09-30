@@ -1,5 +1,4 @@
 import PIL
-import json
 
 from PIL import ExifTags
 from PIL import Image
@@ -65,24 +64,3 @@ def rotating_the_image(image_path, required_file, saving_path):
     resized_image = PIL.ImageOps.fit(rotated_image, img_size, centering=(0.5, 0.5))
     resized_image.save(saving_path + required_file)
     return 0
-
-
-def writing_data(required_name_of_file, coordinates, url):
-    my_details = {
-        'type': 'FeatureCollection',
-        'features': [
-            {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': coordinates,
-                    'properties': {
-                        'url': url
-                    },
-                }
-            }
-        ]
-    }
-
-    with open(required_name_of_file, "w+")as json_file:
-        json.dump(my_details, json_file, indent=4)
