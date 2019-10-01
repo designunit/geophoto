@@ -5,7 +5,7 @@ import sys
 from PIL import Image
 
 import coordlib
-import imgeditlib
+import imglib
 import geojson
 
 
@@ -37,12 +37,12 @@ counter = 0
 
 for file in glob.glob('*.JPG'):
     with Image.open(file) as original_image:
-        exif = imgeditlib.get_exif(file)
-        geotags = imgeditlib.get_geo_info(exif)
-        required_rotation = imgeditlib.get_orientation(file)
+        exif = imglib.get_exif(file)
+        geotags = imglib.get_geo_info(exif)
+        required_rotation = imglib.get_orientation(file)
         if geotags:
             coordinates = coordlib.get_coordinates(geotags)
-            imgeditlib.rotating_the_image(source_folder, file, destination_folder, size)
+            imglib.rotating_the_image(source_folder, file, destination_folder, size)
             images.append({
                 'id': counter,
                 'url': url_base + file,
