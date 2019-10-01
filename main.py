@@ -4,7 +4,7 @@ import sys
 
 from PIL import Image
 
-import coordinates_convector
+import coordlib
 import image
 import geojson
 
@@ -39,7 +39,7 @@ for file in glob.glob('*.JPG'):
         geotags = image.get_geo_info(exif)
         required_rotation = image.get_orientation(file)
         if geotags:
-            coordinates = coordinates_convector.get_coordinates(geotags)
+            coordinates = coordlib.get_coordinates(geotags)
             image.rotating_the_image(source_folder, file, destination_folder, size)
             images.append({
                 'id': counter,
