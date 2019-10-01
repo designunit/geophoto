@@ -40,7 +40,7 @@ for file in glob.glob('*.JPG'):
         required_rotation = imglib.get_orientation(file)
         if geotags:
             coordinates = coordlib.get_coordinates(geotags)
-            imglib.functions_run_off(filename, size, destination_folder)
+            imglib.functions_run_off(file, size, destination_folder)
 
             images.append({
                 'id': counter,
