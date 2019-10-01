@@ -10,9 +10,11 @@ import geojson
 
 
 source_folder = sys.argv[1]
-filename = source_folder + 'yard.JPG'
+# filename = source_folder + 'yard.JPG'
+filename = os.path.join(source_folder, 'yard.JPG')
 destination_folder = sys.argv[2]
-name_of_the_geojson_file = destination_folder + "dataset.geojson"
+# name_of_the_geojson_file = destination_folder + "dataset.geojson"
+name_of_the_geojson_file = os.path.join(destination_folder, 'dataset.geojson')
 url_base = sys.argv[3]
 size = (int(sys.argv[4]), int(sys.argv[4]))
 

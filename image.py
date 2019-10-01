@@ -63,3 +63,12 @@ def rotating_the_image(image_path, required_file, saving_path, img_size):
     resized_image = PIL.ImageOps.fit(rotated_image, img_size, centering=(0.5, 0.5))
     resized_image.save(saving_path + required_file)
     return 0
+
+
+def resizing_the_image():
+
+
+
+def saving_the_changes():
+
+
