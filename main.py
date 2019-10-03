@@ -34,13 +34,13 @@ images = []
 counter = 0
 
 for file in glob.glob('*.JPG'):
-    # with Image.open(file) as original_image:
     exif = imglib.get_exif(file)
     geotags = imglib.get_geo_info(exif)
-    # required_rotation = imglib.get_orientation(file)
     if geotags:
         coordinates = coordlib.get_coordinates(geotags)
         imglib.operations_run1(file, destination_folder, size)
+        # imglib.operations_run1(file, size, destination_folder)
+        # imglib.operations_run(file, destination_folder, size)
 
         images.append({
             'id': counter,
