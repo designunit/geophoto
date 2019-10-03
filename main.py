@@ -34,23 +34,23 @@ images = []
 counter = 0
 
 for file in glob.glob('*.JPG'):
-    with Image.open(file) as original_image:
-        exif = imglib.get_exif(file)
-        geotags = imglib.get_geo_info(exif)
-        required_rotation = imglib.get_orientation(file)
-        if geotags:
-            coordinates = coordlib.get_coordinates(geotags)
-            imglib.functions_run_off(file, size, destination_folder)
+    # with Image.open(file) as original_image:
+    exif = imglib.get_exif(file)
+    geotags = imglib.get_geo_info(exif)
+    # required_rotation = imglib.get_orientation(file)
+    if geotags:
+        coordinates = coordlib.get_coordinates(geotags)
+        imglib.operations_run1(file, destination_folder, size)
 
-            images.append({
-                'id': counter,
-                'url': url_base + file,
-                'coordinates': coordinates,
-                'value': 1
-            })
-            counter += 1
-        else:
-            pass
+        images.append({
+            'id': counter,
+            'url': url_base + file,
+            'coordinates': coordinates,
+            'value': 1
+        })
+        counter += 1
+    else:
+        pass
 
 features = geojson.create_geojson(images)
 geojson.save_json(name_of_the_geojson_file, features)

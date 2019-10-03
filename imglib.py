@@ -63,28 +63,27 @@ def rotating_the_image(required_img):
 
 
 def resizing_the_image(required_img, required_size):
-    rotated_image = rotating_the_image(required_img)
-    resized_image = PIL.ImageOps.fit(rotated_image, required_size, centering=(0.5, 0.5))
+    resized_image = PIL.ImageOps.fit(required_img, required_size, centering=(0.5, 0.5))
     return resized_image
 
 
 def saving_the_image(required_img, required_saving_path):
     required_img.save(required_saving_path)
-    return 0
 
 
-def functions_run_off(required_img, required_size, required_saving_path):
-    img_obj = rotating_the_image(required_img)
-    resized_img = resizing_the_image(img_obj, required_size)
+def operations_run(required_img, required_size, required_saving_path):
+    img_obj = Image.open(required_img)
+    rotated_img = rotating_the_image(img_obj)
+    resized_img = resizing_the_image(rotated_img, required_size)
     saving_the_image(resized_img, required_saving_path)
+
+
+def operations_run1(required_img, saving_path, img_size):
+    image_obj = Image.open(required_img)  # TODO: .open remove
+    # image_obj = required_img
+    orientation = get_orientation(required_img)
+    degrees = get_rotate(orientation)
+    rotated_image = image_obj.rotate(degrees)
+    resized_image = PIL.ImageOps.fit(rotated_image, img_size, centering=(0.5, 0.5))
+    resized_image.save(saving_path + required_img)
     return 0
-
-
-# def rotating_the_image(image_path, required_img, saving_path, img_size):
-#     image_obj = Image.open(image_path + required_img) # TODO: .open remove
-#     orientation = get_orientation(required_img)
-#     degrees = get_rotate(orientation)
-#     rotated_image = image_obj.rotate(degrees)
-#     resized_image = PIL.ImageOps.fit(rotated_image, img_size, centering=(0.5, 0.5))
-#     resized_image.save(saving_path + required_img)
-#     return 0
