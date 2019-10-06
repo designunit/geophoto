@@ -68,7 +68,7 @@ def rotating_the_image(required_img):
 #     return None
 
 
-# def saving_the_image(required_img, required_saving_path):
+# def saving_the_image(required_img, required_saving_path):jfjsdhf
 
 
 # def operations_run(required_img, required_size, required_saving_path):
