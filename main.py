@@ -38,9 +38,8 @@ for file in glob.glob('*.JPG'):
     geotags = imglib.get_geo_info(exif)
     if geotags:
         coordinates = coordlib.get_coordinates(geotags)
-        imglib.operations_run1(file, destination_folder, size)
-        # imglib.operations_run1(file, size, destination_folder)
-        # imglib.operations_run(file, destination_folder, size)
+        # imglib.operations_run1(file, destination_folder, size)
+        imglib.operations_TESTING(file, destination_folder, size)
 
         images.append({
             'id': counter,

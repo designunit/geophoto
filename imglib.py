@@ -56,9 +56,10 @@ def get_rotate(orientation):
 
 
 def rotating_the_image(required_img):
+    image_obj = Image.open(required_img)
     orientation = get_orientation(required_img)
     degrees = get_rotate(orientation)
-    rotated_image = required_img.rotate(degrees)
+    rotated_image = image_obj.rotate(degrees)
     return rotated_image
 
 
@@ -74,13 +75,17 @@ def rotating_the_image(required_img):
 #     img_obj = Image.open(required_img)
 
 
-# def
-
-
 def operations_run1(required_img, saving_path, img_size):
     image_obj = Image.open(required_img)
     orientation = get_orientation(required_img)
     degrees = get_rotate(orientation)
     rotated_image = image_obj.rotate(degrees)
+    resized_image = PIL.ImageOps.fit(rotated_image, img_size, centering=(0.5, 0.5))
+    resized_image.save(saving_path + required_img)
+
+
+def operations_TESTING(required_img, saving_path, img_size):
+    image_obj = Image.open(required_img)
+    rotated_image = rotating_the_image(image_obj)
     resized_image = PIL.ImageOps.fit(rotated_image, img_size, centering=(0.5, 0.5))
     resized_image.save(saving_path + required_img)
