@@ -8,15 +8,13 @@ from PIL.ExifTags import TAGS
 
 
 def get_exif(required_img):
-    image = Image.open(required_img)
-    image.verify()
-    return image.getexif()
+    required_img.verify()
+    return required_img.getexif()
 
 
 def get_geo_info(required_exif):
     if not required_exif:
         return None
-
     geo_info = {}
     for (idx, tag) in TAGS.items():
         if tag == 'GPSInfo':
@@ -25,7 +23,6 @@ def get_geo_info(required_exif):
             for (key, val) in GPSTAGS.items():
                 if key in required_exif[idx]:
                     geo_info[val] = required_exif[idx][key]
-
     return geo_info
 
 
@@ -55,37 +52,10 @@ def get_rotate(orientation):
     return 0
 
 
-def rotating_the_image(required_img):
-    image_obj = Image.open(required_img)
-    orientation = get_orientation(required_img)
-    degrees = get_rotate(orientation)
-    rotated_image = image_obj.rotate(degrees)
-    return rotated_image
-
-
-# def resizing_the_image(required_img, required_size):
-
-#     return None
-
-
-# def saving_the_image(required_img, required_saving_path):
-
-
-# def operations_run(required_img, required_size, required_saving_path):
-#     img_obj = Image.open(required_img)
-
-
 def operations_run1(required_img, saving_path, img_size):
     image_obj = Image.open(required_img)
     orientation = get_orientation(required_img)
     degrees = get_rotate(orientation)
     rotated_image = image_obj.rotate(degrees)
-    resized_image = PIL.ImageOps.fit(rotated_image, img_size, centering=(0.5, 0.5))
-    resized_image.save(saving_path + required_img)
-
-
-def operations_TESTING(required_img, saving_path, img_size):
-    image_obj = Image.open(required_img)
-    rotated_image = rotating_the_image(image_obj)
     resized_image = PIL.ImageOps.fit(rotated_image, img_size, centering=(0.5, 0.5))
     resized_image.save(saving_path + required_img)
