@@ -11,20 +11,13 @@ import geojson
 
 source_folder = sys.argv[1]
 destination_folder = sys.argv[2]
-name_of_the_geojson_file = os.path.join(destination_folder, 'dataset.geojson')
+full_name_of_the_geojson_file = os.path.join(destination_folder, 'dataset.geojson')
 url_base = sys.argv[3]
 size = (int(sys.argv[4]), int(sys.argv[4]))
-
-if os.path.exists(source_folder):
-    pass
-else:
-    input(str(source_folder))
-    os.mkdir(source_folder)
 
 if os.path.exists(destination_folder):
     pass
 else:
-    input(str(destination_folder))
     os.mkdir(destination_folder)
 
 os.chdir(source_folder)
@@ -51,4 +44,4 @@ for file in glob.glob('*.JPG'):
         pass
 
 features = geojson.create_geojson(images)
-geojson.save_json(name_of_the_geojson_file, features)
+geojson.save_json(full_name_of_the_geojson_file, features)
