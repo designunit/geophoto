@@ -1,5 +1,4 @@
 import PIL
-import json
 
 from PIL import ExifTags
 from PIL import Image
@@ -8,16 +7,14 @@ from PIL.ExifTags import GPSTAGS
 from PIL.ExifTags import TAGS
 
 
-def get_exif(required_file):
-    image = Image.open(required_file)
-    image.verify()
-    return image.getexif()
+def get_exif(required_img):
+    required_img.verify()
+    return required_img.getexif()
 
 
 def get_geo_info(required_exif):
     if not required_exif:
         return None
-
     geo_info = {}
     for (idx, tag) in TAGS.items():
         if tag == 'GPSInfo':
@@ -26,12 +23,11 @@ def get_geo_info(required_exif):
             for (key, val) in GPSTAGS.items():
                 if key in required_exif[idx]:
                     geo_info[val] = required_exif[idx][key]
-
     return geo_info
 
 
-def get_orientation(required_file):
-    with Image.open(required_file) as required_image:
+def get_orientation(required_img):
+    with Image.open(required_img) as required_image:
         metadata_of_original_image = {
             ExifTags.TAGS[k]: v
             for k, v in required_image.getexif().items()
@@ -56,33 +52,10 @@ def get_rotate(orientation):
     return 0
 
 
-def rotating_the_image(image_path, required_file, saving_path):
-    image_obj = Image.open(image_path + required_file)
-    orientation = get_orientation(required_file)
+def operations_run1(required_img, saving_path, img_size):
+    image_obj = Image.open(required_img)
+    orientation = get_orientation(required_img)
     degrees = get_rotate(orientation)
     rotated_image = image_obj.rotate(degrees)
-    img_size = (200, 200)
     resized_image = PIL.ImageOps.fit(rotated_image, img_size, centering=(0.5, 0.5))
-    resized_image.save(saving_path + required_file)
-    return 0
-
-
-def writing_data(required_name_of_file, coordinates, img_name):
-    my_details = {
-        'type': 'FeatureCollection',
-        'features': [
-            {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': coordinates,
-                    'properties': {
-                        'features': img_name
-                    },
-                }
-            }
-        ]
-    }
-
-    with open(required_name_of_file, "w+")as json_file:
-        json.dump(my_details, json_file, indent=4)
+    resized_image.save(saving_path + required_img)

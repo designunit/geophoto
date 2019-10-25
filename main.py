@@ -1,41 +1,47 @@
 import glob
 import os
+import sys
 
 from PIL import Image
 
-import coordinates_convector
-import redact_functions
+import coordlib
+import imglib
+import geojson
 
-# path = str(input())
-# source_folder = str(input())
-# destination_folder = str(input())
-source_folder = "E:/jpg/"
-filename = source_folder + 'yard.JPG'
-destination_folder = "E:/jpg1/"
-name_of_the_geojson_file = destination_folder + "coordinates_and_titles.geojson"
 
-if os.path.exists(source_folder):
-    pass
-else:
-    input(str(source_folder))
-    os.mkdir(source_folder)
+source_folder = sys.argv[1]
+destination_folder = sys.argv[2]
+full_name_of_the_geojson_file = os.path.join(destination_folder, 'dataset.geojson')
+url_base = sys.argv[3]
+size = (int(sys.argv[4]), int(sys.argv[4]))
 
 if os.path.exists(destination_folder):
     pass
 else:
-    input(str(destination_folder))
     os.mkdir(destination_folder)
 
 os.chdir(source_folder)
 
+images = []
+counter = 0
+
 for file in glob.glob('*.JPG'):
-    with Image.open(file) as original_image:
-        exif = redact_functions.get_exif(file)
-        geotags = redact_functions.get_geo_info(exif)
-        required_rotation = redact_functions.get_orientation(file)
-        if geotags:
-            coordinates = coordinates_convector.get_coordinates(geotags)
-            redact_functions.writing_data(name_of_the_geojson_file, coordinates, file)
-            redact_functions.rotating_the_image(source_folder, file, destination_folder)
-        else:
-            pass
+    image = Image.open(file)
+    exif = imglib.get_exif(image)
+    geotags = imglib.get_geo_info(exif)
+    if geotags:
+        coordinates = coordlib.get_coordinates(geotags)
+        imglib.operations_run1(file, destination_folder, size)
+
+        images.append({
+            'id': counter,
+            'url': url_base + file,
+            'coordinates': coordinates,
+            'value': 1
+        })
+        counter += 1
+    else:
+        pass
+
+features = geojson.create_geojson(images)
+geojson.save_json(full_name_of_the_geojson_file, features)

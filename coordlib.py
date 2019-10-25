@@ -18,4 +18,4 @@ def get_coordinates(geotags):
     lon = get_decimal_from_dms(geotags['GPSLongitude'],
                                geotags['GPSLongitudeRef'])
 
-    return (lat, lon)
+    return lon, lat
