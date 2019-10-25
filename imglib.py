@@ -1,4 +1,5 @@
 import PIL
+import os
 
 from PIL import ExifTags
 from PIL import Image
@@ -26,18 +27,17 @@ def get_geo_info(required_exif):
     return geo_info
 
 
-def get_orientation(required_img):
-    with Image.open(required_img) as required_image:
-        metadata_of_original_image = {
-            ExifTags.TAGS[k]: v
-            for k, v in required_image.getexif().items()
-            if k in ExifTags.TAGS
-        }
-        if 'Orientation' in metadata_of_original_image:
-            orientation_index = metadata_of_original_image['Orientation']
-            return orientation_index
-        elif 'Orientation' not in metadata_of_original_image:
-            return None
+def get_orientation(image_obj):
+    metadata_of_original_image = {
+        ExifTags.TAGS[k]: v
+        for k, v in image_obj.getexif().items()
+        if k in ExifTags.TAGS
+    }
+    if 'Orientation' in metadata_of_original_image:
+        orientation_index = metadata_of_original_image['Orientation']
+        return orientation_index
+    elif 'Orientation' not in metadata_of_original_image:
+        return None
 
 
 def get_rotate(orientation):
@@ -52,10 +52,9 @@ def get_rotate(orientation):
     return 0
 
 
-def operations_run1(required_img, saving_path, img_size):
-    image_obj = Image.open(required_img)
-    orientation = get_orientation(required_img)
+def saving_img(image_obj, path, img_size):
+    orientation = get_orientation(image_obj)
     degrees = get_rotate(orientation)
     rotated_image = image_obj.rotate(degrees)
     resized_image = PIL.ImageOps.fit(rotated_image, img_size, centering=(0.5, 0.5))
-    resized_image.save(saving_path + required_img)
+    resized_image.save(path)

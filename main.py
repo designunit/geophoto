@@ -20,18 +20,18 @@ if os.path.exists(destination_folder):
 else:
     os.mkdir(destination_folder)
 
-os.chdir(source_folder)
-
 images = []
 counter = 0
 
-for file in glob.glob('*.JPG'):
-    image = Image.open(file)
+for file in glob.glob(os.path.join(source_folder, '*.JPG')):
+    file_with_normpath = os.path.normpath(file)
+    image = Image.open(file_with_normpath)
     exif = imglib.get_exif(image)
     geotags = imglib.get_geo_info(exif)
     if geotags:
         coordinates = coordlib.get_coordinates(geotags)
-        imglib.operations_run1(file, destination_folder, size)
+        path = os.path.join(file, destination_folder)
+        imglib.saving_img(image, path, size)
 
         images.append({
             'id': counter,
