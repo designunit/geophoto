@@ -4,3 +4,4 @@ venv
 *.JPG
 __pycache__
 *.txt
+*.geojson
