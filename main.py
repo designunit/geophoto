@@ -14,7 +14,7 @@ destination_folder = sys.argv[2]
 full_name_of_the_geojson_file = os.path.join(destination_folder, 'dataset.geojson')
 url_base = sys.argv[3]
 size = (int(sys.argv[4]), int(sys.argv[4]))
-#comment lol
+
 if not os.path.exists(destination_folder):
     os.mkdir(destination_folder)
 else:
