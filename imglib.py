@@ -1,8 +1,6 @@
 import PIL
-import os
 
 from PIL import ExifTags
-from PIL import Image
 from PIL import ImageOps
 from PIL.ExifTags import GPSTAGS
 from PIL.ExifTags import TAGS
@@ -40,7 +38,7 @@ def get_orientation(image_obj):
         return None
 
 
-def get_rotate(orientation):
+def get_degrees(orientation):
     if orientation == 1:
         return 0
     elif orientation == 3:
@@ -49,12 +47,11 @@ def get_rotate(orientation):
         return 270
     elif orientation == 8:
         return 90
-    return 0
 
 
 def saving_img(image_obj, path, img_size):
     orientation = get_orientation(image_obj)
-    degrees = get_rotate(orientation)
+    degrees = get_degrees(orientation)
     rotated_image = image_obj.rotate(degrees)
     resized_image = PIL.ImageOps.fit(rotated_image, img_size, centering=(0.5, 0.5))
     resized_image.save(path)

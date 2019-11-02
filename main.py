@@ -25,12 +25,12 @@ counter = 0
 
 for file in glob.glob(os.path.join(source_folder, '*.JPG')):
     file_with_normpath = os.path.normpath(file)
-    image = Image.open(file_with_normpath)
+    image = Image.open(file)
     exif = imglib.get_exif(image)
     geotags = imglib.get_geo_info(exif)
     if geotags:
         coordinates = coordlib.get_coordinates(geotags)
-        path = os.path.join(file, destination_folder)
+        path = os.path.join(destination_folder, os.path.basename(file))
         imglib.saving_img(image, path, size)
 
         images.append({
