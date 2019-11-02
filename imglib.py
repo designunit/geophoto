@@ -7,7 +7,6 @@ from PIL.ExifTags import TAGS
 
 
 def get_exif(required_img):
-    required_img.verify()
     return required_img.getexif()
 
 

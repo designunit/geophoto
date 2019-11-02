@@ -26,6 +26,7 @@ counter = 0
 for file in glob.glob(os.path.join(source_folder, '*.JPG')):
     file_with_normpath = os.path.normpath(file)
     image = Image.open(file)
+    image.load()
     exif = imglib.get_exif(image)
     geotags = imglib.get_geo_info(exif)
     if geotags:
