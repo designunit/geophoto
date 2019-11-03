@@ -48,7 +48,7 @@ def get_degrees(orientation):
         return 90
 
 
-def saving_img(image_obj, path, img_size):
+def saving_modified_img(image_obj, path, img_size):
     orientation = get_orientation(image_obj)
     degrees = get_degrees(orientation)
     rotated_image = image_obj.rotate(degrees)

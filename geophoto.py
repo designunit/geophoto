@@ -17,8 +17,6 @@ size = (int(sys.argv[4]), int(sys.argv[4]))
 
 if not os.path.exists(destination_folder):
     os.mkdir(destination_folder)
-else:
-    pass
 
 images = []
 counter = 0
@@ -32,7 +30,7 @@ for file in glob.glob(os.path.join(source_folder, '*.JPG')):
     if geotags:
         coordinates = coordlib.get_coordinates(geotags)
         path = os.path.join(destination_folder, os.path.basename(file))
-        imglib.saving_img(image, path, size)
+        imglib.saving_modified_img(image, path, size)
 
         images.append({
             'id': counter,
