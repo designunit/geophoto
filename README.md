@@ -16,10 +16,13 @@ $ git clone git@github.com:designunit/geophoto.git
 ```
 $ python3 geophoto.py <source_folder_path> <output_folder_path> <link> <size>
 ```
-1)``````
+1)```<source_folder_path>``` - is your folder with jpeg images
+2)```<output_folder_path>``` - is your folder which you want to contain output data
+3)```<link>``` - is link which contains every image address
+4)```<size>``` - is size of output images in output folder 
 ### Example:
 In ```<source_folder_path>``` and ```<output_folder_path>``` do not forget to use full name of folders with which you interact, as in example below:
 ```
-$ python3 geophoto.py /home/modernpacifist/Documents/jpg/ /home/modernpacifist/Documents/jpg1/ google.com 200
+$ python3 geophoto.py /home/usr/source_folder/ /home/usr/output_folder/ google.com 200
 ```
 Make sure to run this program in downloaded project directory, otherwise it won't work.
