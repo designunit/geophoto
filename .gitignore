@@ -3,5 +3,4 @@ venv
 *.jpg
 *.JPG
 __pycache__
-*.txt
 *.geojson
