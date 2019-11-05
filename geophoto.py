@@ -23,7 +23,6 @@ def main():
     counter = 0
 
     for file in glob.glob(os.path.join(source_folder, '*.JPG')):
-        file_with_normpath = os.path.normpath(file)
         image = Image.open(file)
         image.load()
         exif = imglib.get_exif(image)
@@ -45,6 +44,7 @@ def main():
 
     features = geojson.create_geojson(images)
     geojson.save_json(full_name_of_the_geojson_file, features)
+
 
 if __name__ == '__main__':
     main()
