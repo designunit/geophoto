@@ -9,9 +9,9 @@ import imglib
 import geojson
 
 
-if __name__ == '__main__':
-    source_folder = os.path.expanduser(sys.argv[1])
-    destination_folder = os.path.expanduser(sys.argv[2])
+def main():
+    source_folder = sys.argv[1]
+    destination_folder = sys.argv[2]
     full_name_of_the_geojson_file = os.path.join(destination_folder, 'dataset.geojson')
     url_base = sys.argv[3]
     size = (int(sys.argv[4]), int(sys.argv[4]))
@@ -45,3 +45,6 @@ if __name__ == '__main__':
 
     features = geojson.create_geojson(images)
     geojson.save_json(full_name_of_the_geojson_file, features)
+
+if __name__ == '__main__':
+    main()
