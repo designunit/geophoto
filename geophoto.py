@@ -8,6 +8,12 @@ import coordlib
 import imglib
 import geojson
 
+def image_files(source_folder, extensions):
+    for file in os.listdir(source_folder):
+        basename, ext = os.path.splitext(file)
+        ext = ext.lower()
+        if ext in extensions:
+            yield file
 
 def main():
     source_folder = os.path.expanduser(sys.argv[1])
@@ -22,8 +28,9 @@ def main():
     images = []
     counter = 0
 
-    for file in os.listdir(source_folder):
-        if file.lower().endswith(".jpg") or file.lower().endswith(".jpeg"):
+    for file in image_files(source_folder, ['.jpg', 'jpeg']):
+#    for file in os.listdir(source_folder):
+#        if file.lower().endswith(".jpg") or file.lower().endswith(".jpeg"):
             image = Image.open(os.path.join(source_folder, file))
             image.load()
             exif = imglib.get_exif(image)
