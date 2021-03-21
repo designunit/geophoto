@@ -1,7 +1,7 @@
 def get_decimal_from_dms(dms, ref):
-    degrees = dms[0][0] / dms[0][1]
-    minutes = dms[1][0] / dms[1][1] / 60.0
-    seconds = dms[2][0] / dms[2][1] / 3600.0
+    degrees = dms[0]
+    minutes = dms[1] / 60.0
+    seconds = dms[2] / 3600.0
 
     if ref in ['S', 'W']:
         degrees = -degrees
@@ -12,10 +12,7 @@ def get_decimal_from_dms(dms, ref):
 
 
 def get_coordinates(geotags):
-    lat = get_decimal_from_dms(geotags['GPSLatitude'],
-                               geotags['GPSLatitudeRef'])
+    lat = get_decimal_from_dms(geotags['GPSLatitude'], geotags['GPSLatitudeRef'])
+    lng = get_decimal_from_dms(geotags['GPSLongitude'], geotags['GPSLongitudeRef'])
 
-    lon = get_decimal_from_dms(geotags['GPSLongitude'],
-                               geotags['GPSLongitudeRef'])
-
-    return lon, lat
+    return lng, lat

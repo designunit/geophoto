@@ -1,10 +1,13 @@
 import os
 import sys
-
+import json
+from argparse import ArgumentParser
+from shutil import copy
+from pathlib import Path
+from tqdm import tqdm
 from PIL import Image
 
 import coordlib
-import geojson
 import imglib
 
 
@@ -13,45 +16,119 @@ def iterate_files(source_folder, extensions):
         basename, ext = os.path.splitext(file)
         ext = ext.lower()
         if ext in extensions:
-            yield file
+            yield Path(file)
 
 
-def main():
-    source_folder = os.path.expanduser(sys.argv[1])
-    destination_folder = os.path.expanduser(sys.argv[2])
-    full_name_of_the_geojson_file = os.path.join(destination_folder, 'dataset.geojson')
-    url_base = sys.argv[3]
-    size = (int(sys.argv[4]), int(sys.argv[4]))
+def img_factory(img):
+    return {
+        "type": "Feature",
+        "id": img["id"],
+        "geometry": {
+            "type": "Point",
+            "coordinates": img["coordinates"],
+        },
+        "properties": {
+            "src": str(img["src"]),
+            "url": str(img["url"]),
+            "value": img["value"],
+        },
+    }
 
-    if not os.path.exists(destination_folder):
+
+def create_geojson(images):
+    return {
+        "type": "FeatureCollection",
+        "features": [
+            img_factory(img)
+            for img in images
+        ],
+    }
+
+
+def get_args():
+    parser = ArgumentParser()
+    parser.add_argument(
+        "-d",
+        required=True,
+        dest="source_dir",
+        type=str,
+        help="path to folder with images",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        required=True,
+        dest="output_dir",
+        type=str,
+        help="path to output folder",
+    )
+    # parser.add_argument('-o', '--output', default='dataset.geojson', dest='output', type=str, help='name of output file')
+    parser.add_argument(
+        "--size",
+        default=100,
+        dest="thumbnail_size",
+        type=int,
+        help="size of thumbnail in px",
+    )
+    parser.add_argument(
+        "--thumbnail",
+        default="thumbnail",
+        dest="thumbnail_field",
+        type=str,
+        help="field name for thumbnail",
+    )
+    parser.add_argument(
+        "--url-base",
+        default="",
+        dest="url_base",
+        type=str,
+        help="url base for thumbnail",
+    )
+    return parser.parse_args()
+
+
+if __name__ == "__main__":
+    args = get_args()
+
+    source_folder = Path(args.source_dir).expanduser()
+    destination_folder = Path(args.output_dir).expanduser()
+
+    url_base = args.url_base
+    size = (args.thumbnail_size, args.thumbnail_size)
+
+    if not destination_folder.is_dir():
         os.mkdir(destination_folder)
 
     images = []
     counter = 0
 
-    for file in iterate_files(source_folder, ['.jpg', '.jpeg']):
-        image = Image.open(os.path.join(source_folder, file))
+    files = list(iterate_files(source_folder, [".jpg", ".jpeg"]))
+    for file in tqdm(files):
+        filepath = source_folder / file
+        image = Image.open(filepath)
         image.load()
         exif = imglib.get_exif(image)
         geotags = imglib.get_geo_info(exif)
-        if geotags:
-            coordinates = coordlib.get_coordinates(geotags)
-            path = os.path.join(destination_folder, os.path.basename(file))
-            imglib.process_image(image, path, size)
+        if not geotags:
+            continue
+        coordinates = coordlib.get_coordinates(geotags)
+        name = Path(f"{file.stem}-thumbnail.jpg")
+        path = os.path.join(destination_folder, name)
+        img = imglib.process_image(image, size)
+        img.save(path)
+        copy(filepath, destination_folder / file)
+        images.append(
+            {
+                "id": counter,
+                "url": url_base + str(name),
+                "src": url_base + str(file),
+                "coordinates": coordinates,
+                "value": 1,
+            }
+        )
+        counter += 1
 
-            images.append({
-                'id': counter,
-                'url': url_base + file,
-                'coordinates': coordinates,
-                'value': 1
-            })
-            counter += 1
-        else:
-            pass
-
-    features = geojson.create_geojson(images)
-    geojson.save_json(full_name_of_the_geojson_file, features)
-
-
-if __name__ == '__main__':
-    main()
+    features = create_geojson(images)
+    filename = destination_folder / Path("data.geojson")
+    with open(filename, "w") as f:
+        json.dump(features, f, indent=4)
