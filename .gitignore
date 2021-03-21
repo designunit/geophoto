@@ -1,6 +1,5 @@
 .idea/
+.vscode
 venv
-*.jpg
-*.JPG
 __pycache__
-*.geojson
+
