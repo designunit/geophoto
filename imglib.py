@@ -34,7 +34,7 @@ def get_orientation(image_obj):
         orientation_index = metadata_of_original_image['Orientation']
         return orientation_index
     elif 'Orientation' not in metadata_of_original_image:
-        return None
+        return 1
 
 
 def get_degrees(orientation):
@@ -48,9 +48,8 @@ def get_degrees(orientation):
         return 90
 
 
-def process_image(image_obj, path, img_size):
+def process_image(image_obj, img_size):
     orientation = get_orientation(image_obj)
     degrees = get_degrees(orientation)
     rotated_image = image_obj.rotate(degrees)
-    resized_image = PIL.ImageOps.fit(rotated_image, img_size, centering=(0.5, 0.5))
-    resized_image.save(path)
+    return PIL.ImageOps.fit(rotated_image, img_size, centering=(0.5, 0.5))
