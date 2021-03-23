@@ -84,6 +84,14 @@ def get_args():
         type=str,
         help="url base for thumbnail",
     )
+    parser.add_argument(
+        "--default-coord",
+        default=None,
+        dest="default_coord",
+        nargs="+",
+        type=float,
+        help="default GPS coordinate for image",
+    )
     return parser.parse_args()
 
 
@@ -109,9 +117,11 @@ if __name__ == "__main__":
         image.load()
         exif = imglib.get_exif(image)
         geotags = imglib.get_geo_info(exif)
-        if not geotags:
+        if not geotags and not args.default_coord:
             continue
-        coordinates = coordlib.get_coordinates(geotags)
+        coordinates = args.default_coord
+        if geotags:
+            coordinates = coordlib.get_coordinates(geotags)
         name = Path(f"{file.stem}-thumbnail.jpg")
         path = os.path.join(destination_folder, name)
         img = imglib.process_image(image, size)

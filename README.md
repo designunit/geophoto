@@ -12,17 +12,27 @@ pip package manager is not available for this project yet, so you need to clone 
 ```
 $ git clone git@github.com:designunit/geophoto.git
 ```
-### Syntax:
+### Usage:
+
+Basic:
 ```
-$ python3 geophoto.py <source_folder_path> <output_folder_path> <link> <size>
+$ python3 geophoto.py -d SOURCE_DIR -o OUTPUT_DIR 
 ```
-1) ```<source_folder_path>``` - is your folder with jpeg images
-2) ```<output_folder_path>``` - is your folder which you want to contain output data
-3) ```<link>``` - is link which contains every image address
-4) ```<size>``` - is size of output images in output folder 
-### Example:
-In ```<source_folder_path>``` and ```<output_folder_path>``` do not forget to use full name of folders with which you interact, as in example below:
+
+Common:
 ```
-$ python3 geophoto.py /home/usr/source_folder/ /home/usr/output_folder/ google.com 200
+$ python3 geophoto.py -d SOURCE_DIR -o OUTPUT_DIR [--size THUMBNAIL_SIZE] [--thumbnail THUMBNAIL_FIELD] [--url-base URL_BASE] [--default-coord DEFAULT_COORD]
 ```
+
+You can optionally setup GPS coordinates for images without EXIF data:
+```
+$ python3 geophoto.py -d SOURCE_DIR -o OUTPUT_DIR [--default-coord DEFAULT_COORD]
+```
+
+Help:
+```
+$ python3 geophoto.py -h
+```
+
 Make sure to run this program in downloaded project directory, otherwise it won't work.
+
